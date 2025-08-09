@@ -10,28 +10,33 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8;
+            /* Latar belakang gelap yang menyerlah */
+            background-color: #0F172A; /* bg-slate-900 */
         }
         .schedule-item {
             transition: all 0.2s ease;
         }
         .schedule-item:hover {
-            background-color: #e0f2fe;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             transform: translateY(-2px);
         }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<body class="bg-slate-900 flex items-center justify-center min-h-screen p-4">
 
     <!-- Container Utama Jadual -->
-    <div class="max-w-xl w-full bg-white rounded-2xl shadow-xl p-8">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Jadual Peperiksaan SPM 2025</h1>
+    <div class="max-w-xl w-full bg-gray-800 rounded-2xl shadow-xl p-8">
+        <!-- Logo MRSM di bahagian atas -->
+        <div class="flex justify-center mb-4">
+            <img src="Logo_MRSM.png" alt="Logo MRSM" class="w-24 h-24 object-contain">
+        </div>
+        
+        <h1 class="text-3xl font-bold text-center text-gray-100 mb-2">Jadual Peperiksaan SPM 2025</h1>
         
         <!-- Kiraan detik utama yang besar -->
         <div class="text-center my-6">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-indigo-700">Countdown to SPM</h2>
-            <div id="main-countdown" class="text-4xl md:text-5xl font-bold text-indigo-900 mt-2"></div>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-indigo-400">Countdown to SPM</h2>
+            <div id="main-countdown" class="text-4xl md:text-5xl font-bold text-indigo-300 mt-2"></div>
         </div>
 
         <!-- Senarai Jadual Peperiksaan -->
@@ -40,15 +45,20 @@
         </div>
 
         <!-- Kiraan detik untuk last paper -->
-        <div class="text-center mt-8 p-4 bg-gray-100 rounded-lg">
-            <p id="goodbye-countdown" class="text-xl font-semibold text-gray-700"></p>
+        <div class="text-center mt-8 p-4 bg-gray-700 rounded-lg">
+            <p id="goodbye-countdown" class="text-xl font-semibold text-gray-200"></p>
+        </div>
+
+        <!-- Kredit -->
+        <div class="text-center text-xs text-gray-500 mt-4">
+            <p>Program Pendang Gemilang (PPG) MRSM Pendang</p>
         </div>
     </div>
 
     <script>
         // Data peperiksaan yang diambil daripada input pengguna
         const examData = [
-            { subject: "Jadual SPM 2025 – Subjek Terpilih", date: "3 – 6 November", startDate: new Date('November 3, 2025 00:00:00'), endDate: new Date('November 6, 2025 23:59:59') },
+            { subject: "Ujian Bertutur Bahasa Melayu", date: "3 – 6 November", startDate: new Date('November 3, 2025 00:00:00'), endDate: new Date('November 6, 2025 23:59:59') },
             { subject: "Ujian Bertutur Bahasa Melayu", date: "10 – 13 November", startDate: new Date('November 10, 2025 00:00:00'), endDate: new Date('November 13, 2025 23:59:59') },
             { subject: "Ujian Bertutur Bahasa Inggeris", date: "17 November", startDate: new Date('November 17, 2025 00:00:00'), endDate: new Date('November 17, 2025 23:59:59') },
             { subject: "Ujian Amali Fizik", date: "18 November", startDate: new Date('November 18, 2025 00:00:00'), endDate: new Date('November 18, 2025 23:59:59') },
@@ -73,6 +83,9 @@
 
         const mainCountdownElement = document.getElementById('main-countdown');
         const goodbyeCountdownElement = document.getElementById('goodbye-countdown');
+        
+        // Senarai warna untuk latar belakang item
+        const colors = ['bg-blue-300', 'bg-emerald-300', 'bg-yellow-300', 'bg-rose-300', 'bg-purple-300', 'bg-orange-300'];
 
         // Fungsi untuk mengemas kini kiraan detik utama
         function updateMainCountdown() {
@@ -80,7 +93,7 @@
             const timeUntilSPM = firstExamDate - now;
 
             if (timeUntilSPM <= 0) {
-                mainCountdownElement.innerHTML = `<span class="text-green-600">SPM sedang berlangsung!</span>`;
+                mainCountdownElement.innerHTML = `<span class="text-green-400">SPM sedang berlangsung!</span>`;
             } else {
                 const days = Math.floor(timeUntilSPM / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeUntilSPM % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -107,12 +120,12 @@
                 const timeUntilEnd = exam.endDate.getTime() - now;
 
                 if (timeUntilStart <= 0 && timeUntilEnd > 0) {
-                    countdownElement.innerHTML = `<span class="font-bold text-green-600">Sedang Berlangsung</span>`;
+                    countdownElement.innerHTML = `<span class="font-bold text-green-400">Sedang Berlangsung</span>`;
                 } else if (timeUntilEnd <= 0) {
-                    countdownElement.innerHTML = `<span class="font-bold text-red-500">Selesai</span>`;
+                    countdownElement.innerHTML = `<span class="font-bold text-red-400">Selesai</span>`;
                 } else {
                     const days = Math.ceil(timeUntilStart / (1000 * 60 * 60 * 24));
-                    countdownElement.innerHTML = `<span class="font-bold text-indigo-600">${days} Hari</span> lagi`;
+                    countdownElement.innerHTML = `<span class="font-bold text-indigo-400">${days} Hari</span> lagi`;
                 }
             });
         }
@@ -121,22 +134,32 @@
         function updateGoodbyeCountdown() {
             const now = new Date().getTime();
             const timeUntilGoodbye = lastExamDate - now;
-            const daysLeft = Math.ceil(timeUntilGoodbye / (1000 * 60 * 60 * 24));
 
             if (timeUntilGoodbye <= 0) {
                 goodbyeCountdownElement.innerHTML = `Selamat tinggal SPM!`;
             } else {
-                goodbyeCountdownElement.innerHTML = `<span class="font-bold text-2xl text-red-600">${daysLeft}</span> Hari Lagi Sehingga Kita Ucap Selamat Tinggal kepada MRSM`;
+                const days = Math.floor(timeUntilGoodbye / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeUntilGoodbye % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeUntilGoodbye % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeUntilGoodbye % (1000 * 60)) / 1000);
+                
+                const formattedDays = String(days).padStart(2, '0');
+                const formattedHours = String(hours).padStart(2, '0');
+                const formattedMinutes = String(minutes).padStart(2, '0');
+                const formattedSeconds = String(seconds).padStart(2, '0');
+
+                goodbyeCountdownElement.innerHTML = `Goodbye MRSM in <span class="font-bold text-red-400">${formattedDays}:${formattedHours}:${formattedMinutes}:${formattedSeconds}</span>`;
             }
         }
-
 
         // Fungsi untuk menjana jadual peperiksaan secara dinamik
         function generateSchedule() {
             const scheduleList = document.getElementById('scheduleList');
             examData.forEach((exam, index) => {
                 const item = document.createElement('div');
-                item.classList.add('schedule-item', 'flex', 'justify-between', 'items-center', 'p-4', 'bg-blue-50', 'rounded-lg', 'shadow-sm', 'cursor-pointer');
+                // Guna modulo operator untuk mengitar warna dalam senarai colors
+                const colorClass = colors[index % colors.length];
+                item.classList.add('schedule-item', 'flex', 'justify-between', 'items-center', 'p-4', colorClass, 'rounded-lg', 'shadow-sm', 'cursor-pointer');
 
                 // Div untuk subjek dan tarikh
                 const examDetails = document.createElement('div');
