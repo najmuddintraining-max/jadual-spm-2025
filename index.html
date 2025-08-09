@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadual Peperiksaan SPM 2025</title>
+    <!-- Tailwind CSS untuk styling pantas dan responsif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .schedule-item {
+            transition: all 0.2s ease;
+        }
+        .schedule-item:hover {
+            background-color: #e0f2fe;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Container Utama Jadual -->
+    <div class="max-w-xl w-full bg-white rounded-2xl shadow-xl p-8">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Jadual Peperiksaan SPM 2025</h1>
+        
+        <!-- Kiraan detik utama yang besar -->
+        <div class="text-center my-6">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-indigo-700">Countdown to SPM</h2>
+            <div id="main-countdown" class="text-4xl md:text-5xl font-bold text-indigo-900 mt-2"></div>
+        </div>
+
+        <!-- Senarai Jadual Peperiksaan -->
+        <div id="scheduleList" class="flex flex-col space-y-4">
+            <!-- Item senarai akan dijana di sini oleh JavaScript -->
+        </div>
+
+        <!-- Kiraan detik untuk last paper -->
+        <div class="text-center mt-8 p-4 bg-gray-100 rounded-lg">
+            <p id="goodbye-countdown" class="text-xl font-semibold text-gray-700"></p>
+        </div>
+    </div>
+
+    <script>
+        // Data peperiksaan yang diambil daripada input pengguna
+        const examData = [
+            { subject: "Jadual SPM 2025 – Subjek Terpilih", date: "3 – 6 November", startDate: new Date('November 3, 2025 00:00:00'), endDate: new Date('November 6, 2025 23:59:59') },
+            { subject: "Ujian Bertutur Bahasa Melayu", date: "10 – 13 November", startDate: new Date('November 10, 2025 00:00:00'), endDate: new Date('November 13, 2025 23:59:59') },
+            { subject: "Ujian Bertutur Bahasa Inggeris", date: "17 November", startDate: new Date('November 17, 2025 00:00:00'), endDate: new Date('November 17, 2025 23:59:59') },
+            { subject: "Ujian Amali Fizik", date: "18 November", startDate: new Date('November 18, 2025 00:00:00'), endDate: new Date('November 18, 2025 23:59:59') },
+            { subject: "Ujian Amali Kimia", date: "19 November", startDate: new Date('November 19, 2025 00:00:00'), endDate: new Date('November 19, 2025 23:59:59') },
+            { subject: "Ujian Amali Biologi", date: "20 November", startDate: new Date('November 20, 2025 00:00:00'), endDate: new Date('November 20, 2025 23:59:59') },
+            { subject: "Ujian Mendengar Bahasa Melayu & Bahasa Inggeris", date: "25 November 2025", startDate: new Date('November 25, 2025 00:00:00'), endDate: new Date('November 25, 2025 23:59:59') },
+            { subject: "Bahasa Melayu", date: "26 November 2025", startDate: new Date('November 26, 2025 00:00:00'), endDate: new Date('November 26, 2025 23:59:59') },
+            { subject: "Bahasa Inggeris", date: "27 November 2025", startDate: new Date('November 27, 2025 00:00:00'), endDate: new Date('November 27, 2025 23:59:59') },
+            { subject: "Sejarah", date: "1 Disember 2025", startDate: new Date('December 1, 2025 00:00:00'), endDate: new Date('December 1, 2025 23:59:59') },
+            { subject: "Matematik", date: "2 Disember 2025", startDate: new Date('December 2, 2025 00:00:00'), endDate: new Date('December 2, 2025 23:59:59') },
+            { subject: "Pendidikan Islam", date: "4 Disember 2025", startDate: new Date('December 4, 2025 00:00:00'), endDate: new Date('December 4, 2025 23:59:59') },
+            { subject: "Fizik", date: "8 Disember 2025", startDate: new Date('December 8, 2025 00:00:00'), endDate: new Date('December 8, 2025 23:59:59') },
+            { subject: "Kimia", date: "10 Disember 2025", startDate: new Date('December 10, 2025 00:00:00'), endDate: new Date('December 10, 2025 23:59:59') },
+            { subject: "Biologi", date: "15 Disember 2025", startDate: new Date('December 15, 2025 00:00:00'), endDate: new Date('December 15, 2025 23:59:59') },
+            { subject: "Matematik Tambahan", date: "17 Disember 2025", startDate: new Date('December 17, 2025 00:00:00'), endDate: new Date('December 17, 2025 23:59:59') },
+            { subject: "Prinsip Perakaunan", date: "17 Disember 2025", startDate: new Date('December 17, 2025 00:00:00'), endDate: new Date('December 17, 2025 23:59:59') }
+        ];
+
+        // Dapatkan tarikh permulaan peperiksaan pertama untuk kiraan detik utama
+        const firstExamDate = examData[0].startDate.getTime();
+        const lastExamDate = examData[examData.length - 1].endDate.getTime(); // Ambil tarikh akhir dari subjek terakhir
+
+        const mainCountdownElement = document.getElementById('main-countdown');
+        const goodbyeCountdownElement = document.getElementById('goodbye-countdown');
+
+        // Fungsi untuk mengemas kini kiraan detik utama
+        function updateMainCountdown() {
+            const now = new Date().getTime();
+            const timeUntilSPM = firstExamDate - now;
+
+            if (timeUntilSPM <= 0) {
+                mainCountdownElement.innerHTML = `<span class="text-green-600">SPM sedang berlangsung!</span>`;
+            } else {
+                const days = Math.floor(timeUntilSPM / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeUntilSPM % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeUntilSPM % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeUntilSPM % (1000 * 60)) / 1000);
+                
+                const formattedDays = String(days).padStart(2, '0');
+                const formattedHours = String(hours).padStart(2, '0');
+                const formattedMinutes = String(minutes).padStart(2, '0');
+                const formattedSeconds = String(seconds).padStart(2, '0');
+
+                mainCountdownElement.innerHTML = `${formattedDays}:${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+            }
+        }
+
+        // Fungsi untuk mengemas kini kiraan detik setiap subjek
+        function updateSubjectCountdown() {
+            const now = new Date().getTime(); // Dapatkan masa semasa dalam milisaat
+            examData.forEach((exam, index) => {
+                const countdownElement = document.getElementById(`countdown-${index}`);
+                if (!countdownElement) return;
+
+                const timeUntilStart = exam.startDate.getTime() - now;
+                const timeUntilEnd = exam.endDate.getTime() - now;
+
+                if (timeUntilStart <= 0 && timeUntilEnd > 0) {
+                    countdownElement.innerHTML = `<span class="font-bold text-green-600">Sedang Berlangsung</span>`;
+                } else if (timeUntilEnd <= 0) {
+                    countdownElement.innerHTML = `<span class="font-bold text-red-500">Selesai</span>`;
+                } else {
+                    const days = Math.ceil(timeUntilStart / (1000 * 60 * 60 * 24));
+                    countdownElement.innerHTML = `<span class="font-bold text-indigo-600">${days} Hari</span> lagi`;
+                }
+            });
+        }
+        
+        // Fungsi untuk mengemas kini kiraan detik akhir peperiksaan
+        function updateGoodbyeCountdown() {
+            const now = new Date().getTime();
+            const timeUntilGoodbye = lastExamDate - now;
+            const daysLeft = Math.ceil(timeUntilGoodbye / (1000 * 60 * 60 * 24));
+
+            if (timeUntilGoodbye <= 0) {
+                goodbyeCountdownElement.innerHTML = `Selamat tinggal SPM!`;
+            } else {
+                goodbyeCountdownElement.innerHTML = `<span class="font-bold text-2xl text-red-600">${daysLeft}</span> Hari Lagi Sehingga Kita Ucap Selamat Tinggal kepada MRSM`;
+            }
+        }
+
+
+        // Fungsi untuk menjana jadual peperiksaan secara dinamik
+        function generateSchedule() {
+            const scheduleList = document.getElementById('scheduleList');
+            examData.forEach((exam, index) => {
+                const item = document.createElement('div');
+                item.classList.add('schedule-item', 'flex', 'justify-between', 'items-center', 'p-4', 'bg-blue-50', 'rounded-lg', 'shadow-sm', 'cursor-pointer');
+
+                // Div untuk subjek dan tarikh
+                const examDetails = document.createElement('div');
+                const subject = document.createElement('p');
+                subject.classList.add('text-md', 'font-semibold', 'text-gray-800');
+                subject.textContent = exam.subject;
+                const date = document.createElement('p');
+                date.classList.add('text-sm', 'text-gray-500');
+                date.textContent = exam.date;
+                examDetails.appendChild(subject);
+                examDetails.appendChild(date);
+
+                // Div untuk kiraan detik
+                const countdown = document.createElement('div');
+                countdown.id = `countdown-${index}`;
+                countdown.classList.add('text-sm', 'text-right', 'pl-4');
+
+                item.appendChild(examDetails);
+                item.appendChild(countdown);
+
+                scheduleList.appendChild(item);
+            });
+        }
+
+        // Panggil fungsi untuk menjana jadual apabila halaman dimuatkan
+        window.onload = function() {
+            generateSchedule();
+            // Kemas kini kiraan detik utama dan setiap subjek setiap saat
+            setInterval(updateMainCountdown, 1000);
+            setInterval(updateSubjectCountdown, 1000);
+            setInterval(updateGoodbyeCountdown, 1000);
+        };
+    </script>
+</body>
+</html>
